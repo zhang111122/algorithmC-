@@ -1,0 +1,50 @@
+#include<iostream>
+
+int main()
+{
+	//输入每一个序列最多50000个数，
+	int x;
+	int y;
+	int arr1[50000];
+	int arr2[50000];
+	scanf("%d", &x);
+	int line1 = 0;
+	while (line1 < x)
+	{
+		scanf("%d", &arr1[line1]);
+		line1++;
+	}
+	//最后line1的值为arr中元素个数
+	scanf("%d", &y);
+	int line2 = 0;
+	while (line2 < y)
+	{
+		scanf("%d", &arr2[line2]);
+		line2++;
+	}
+	for (int i = 0; i < x; i++)
+	{
+		int tag = 10000 - arr1[i];
+		//在arr2中二分查找tag
+		int left = 0;
+		int right = y - 1;
+		while (left <=right)
+		{
+			int mid = (left + right) / 2;
+			if (arr2[mid] == tag)
+			{
+				printf("YES");
+				return 0;
+			}
+			else if (arr2[mid] > tag)
+			{
+				left = mid + 1;
+			}
+			else {
+				right = mid - 1;
+			}
+		}
+	}
+	printf("NO");
+	return 0;
+}
