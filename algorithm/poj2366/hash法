@@ -1,0 +1,31 @@
+#include <cstdio>
+#include <cstring>
+bool hash[100000];
+
+int main()
+{
+int a,b;
+int n,m;
+while (scanf("%d",&n)==1)
+{
+    memset(hash,0,sizeof(hash));
+    bool ans=false; 
+    while (n--)
+   {
+     scanf("%d",&a);
+     hash[50000+a]=1;
+   }
+   scanf("%d",&m);
+   while (m--)
+  {
+    scanf("%d",&b);
+    if (hash[60000-b])
+    {
+       ans=true;
+    }
+  }
+ if (ans) printf("YES\n");
+ else printf("NO\n");
+}
+return 0;
+}
