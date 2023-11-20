@@ -1,0 +1,62 @@
+#include<iostream>
+#include<cstring>
+#include<cstdio>
+#include<map>
+#include<string>
+#include<math.h>
+using namespace std;
+typedef struct {
+	int x;
+	int y;
+}location;
+
+int squre(int x)
+{
+	return x * x;
+}
+
+double fun(int x1, int x2, int y1, int y2)
+{
+	return (double)sqrt((double)squre(x1 - x2) + (double)squre(y1 - y2));
+}
+int main()
+{
+	//第一行样例数
+	//第二行部队数和发电厂数
+	int num;
+	scanf("%d", &num);
+	double* result = new double[num];
+	int index = 0;
+	for (int i = 0; i < num; i++)
+	{
+		int cnt;
+		scanf("%d", &cnt);
+		location* arr = new location[cnt * 2];
+		//创建一个location数组 前面 0 - cnt-1 存放部队的位置  后面cnt - 2*cnt-1的存放发电厂的位置
+		for (int i = 0; i < 2 * cnt; i++)
+		{
+			scanf("%d %d", &arr[i].x,&arr[i].y);
+		}
+		//计算一下0 - cnt-1 存放部队的位置  后面cnt - 2*cnt-1的存放发电厂的位置 两者位置的最小值
+		double min = INT_MAX;
+		int front = 0;
+		int rear = cnt;
+		for (front = 0; front < cnt; front++)
+		{
+			for (rear = cnt; rear < 2 * cnt ; rear++)
+			{
+				double distance = fun(arr[front].x, arr[rear].x, arr[front].y, arr[rear].y);
+				if (distance < min)
+					min = distance;
+			}
+		}
+		result[index] = min;
+		index++;
+	}
+	for (int i = 0; i < num; i++)
+	{
+		printf("%.3lf\n", result[i]);
+	}
+
+	return 0;
+}
