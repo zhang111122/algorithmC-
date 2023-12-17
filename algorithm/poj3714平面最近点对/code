@@ -1,0 +1,96 @@
+//第七题  平面最近点对
+#include<iostream>
+#include<cstring>
+#include<cstdio>
+#include<map>
+#include<string>
+#include<math.h>
+#include<stack>
+#include<algorithm>
+using namespace std;
+
+typedef struct point {
+	int x;
+	int y;
+	int flag;
+}point;
+
+point arr[200005];
+point b[200005];
+//定义一个函数求平面最近点对的距离
+double dis(point a, point b)
+{
+	if (a.flag == b.flag)
+		return 1e8;
+	return sqrt((double)(a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y));
+}
+
+
+bool cmp(point x, point y)
+{
+	return x.x < y.x;
+}
+bool cmpy(point x, point y)
+{
+	return x.y < y.y;
+}
+
+double solve(int left,int right)//求出数组左右区间之间的最近距离
+{
+	if (left == right)
+		return 1e8;
+	if (left + 1 == right)
+		return dis(arr[left], arr[right]);
+	//求出左半边的最近和右半边的最近  再取最小值作为d   接下来只要再中间mid 左右d的范围内查找点即可
+	int mid = left + right >> 1;
+	double d1 = solve(left, mid);
+	double d2 = solve(mid + 1, right);
+	double d = min(d1, d2);
+	int k = 0;
+	for (int i = left; i <= right; i++)
+	{
+		if (abs(arr[i].x - arr[mid].x) < d)
+			b[++k] = arr[i];
+	}
+	sort(b + 1, b + 1 + k, cmpy);
+	for (int i = 1; i < k; i++)
+	{
+		for (int j = i + 1; j <= k && b[j].y - b[i].y < d; j++)
+		{
+			d = min(d, dis(b[i], b[j]));
+		}
+	}
+	return d;
+}
+
+
+double result[100];
+int main()
+{
+	//平面最近点对问题
+	int n;
+	cin >> n;
+	for (int i = 0; i < n; i++)//表示测试案例的个数
+	{
+		int num;
+		cin >> num; //num表示每一种类型点的个数 所以一共由两倍num个点
+		for (int j = 0; j < 2 * num; j++)
+		{
+			point p;
+			cin >> p.x;
+			cin >> p.y;
+			//0 -- num -1的flag为0  之后的为1区分不同点
+			if (j <= num - 1)
+				p.flag = 0;
+			else
+				p.flag = 1;
+			arr[j] = p;
+		}
+		sort(arr, arr + 2 * num,cmp);
+		double m = solve(0, 2 * num - 1);
+		result[i] = m;
+	}
+	for (int i = 0; i < n; i++)
+		printf("%.3lf\n", result[i]);
+	return 0;
+}
